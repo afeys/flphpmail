@@ -1,0 +1,33 @@
+{
+  "name": "afeys/flphpmail",
+  "description": "Helper clas to make handling mail in PHP a lot easier and more efficient",
+  "keywords": [
+    "mail", "email", "helper", "imap"
+  ],
+  "homepage": "https://github.com/afeys/flphpmail",
+  "license": "MIT",
+  "authors": [
+    {
+      "name": "Andy Feys",
+      "email": "gitprojects@feys.be",
+      "homepage": "http://www.feys.be"
+    }
+  ],
+  "require": {
+    "php": ">=5.4.0"
+  },
+  "require-dev": {
+    "phpunit/phpunit": "~4.0"
+  },
+  "support": {
+    "issues": "https://github.com/afeys/flphpmail/issues",
+    "source": "https://github.com/afeys/flphpmail/"
+  },
+  "autoload": {
+    "psr-4": { "flphpmail\\": "src/" },
+    "files": ["src/init.php"]
+  },
+  "autoload-dev": {
+    "classmap": [ "tests" ]
+  }
+}
