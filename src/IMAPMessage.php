@@ -307,16 +307,16 @@ class IMAPMessage {
     public function __construct($connection, $index) {
         $this->connection = $connection;
         $this->index = $index;
-        $this->uid = imap_uid($connection->getConnection(), $index);
+        $this->uid = \imap_uid($connection->getConnection(), $index);
         $this->messageindex = $index;
-        $this->header = new \FL\IMAPMessageHeader(imap_headerinfo($connection->getConnection(), $index));
+        $this->header = new \FL\IMAPMessageHeader(\imap_headerinfo($connection->getConnection(), $index));
 //echo "<pre>";print_r($this->header);echo"</pre>";        
-        $this->structure = imap_fetchstructure($connection->getConnection(), $index);
+        $this->structure = \imap_fetchstructure($connection->getConnection(), $index);
 
         // added afeys 20190923
-        $this->origheader = imap_fetchheader($connection->getConnection(), $index);
-        $this->origheaderinfo = imap_headerinfo($connection->getConnection(), $index);
-        $this->origbody = imap_body($connection->getConnection(), $index);
+        $this->origheader = \imap_fetchheader($connection->getConnection(), $index);
+        $this->origheaderinfo = \imap_headerinfo($connection->getConnection(), $index);
+        $this->origbody = \imap_body($connection->getConnection(), $index);
         
         $body = "";
         $bodyhtml = "";
@@ -475,7 +475,7 @@ class IMAPMessage {
     }
 
     private function getPart($connection, $messageNumber, $partNumber, $encoding) {
-        $data = imap_fetchbody($connection, $messageNumber, $partNumber);
+        $data = \imap_fetchbody($connection, $messageNumber, $partNumber);
         switch ($encoding) {
             case 0: return $data; // 7BIT
             case 1: return $data; // 8BIT
@@ -551,7 +551,7 @@ class IMAPMessage {
 
     public function delete() {
         // TODO
-        if (imap_delete($this->connection->getConnection(), $this->index) == true) {
+        if (\imap_delete($this->connection->getConnection(), $this->index) == true) {
             echo "delete successfull";
         } else {
             echo "delete failed";
@@ -559,7 +559,7 @@ class IMAPMessage {
     }
     public function compare($compareToMsg) {
         $returnvalue = false;
-        if ($compareToMsg instanceof IMAPMessage) {
+        if ($compareToMsg instanceof \IMAPMessage) {
             if ($this->generateUniqueIdentifier() == $compareToMsg->generateUniqueIdentifier()) {
                 $returnvalue = true;
             }
@@ -576,11 +576,11 @@ class IMAPMessage {
         echo "message to move: " . $this->messageindex . "<br>";
 //        $imapresult = imap_mail_copy($connection, $this->messageindex, $folder, CP_UID);
         //$imapresult = imap_mail_copy($connection, $this->getUID(), $folder, CP_UID);
-                $imapresult = imap_mail_copy($connection, $this->messageindex, $folder);
+                $imapresult = \imap_mail_copy($connection, $this->messageindex, $folder);
         if ($imapresult == false) {
-            echo "<hr>errors<pre>" . print_r(imap_errors()) . "</pre><hr><br>";
-            echo "<hr>alerts<pre>" . print_r(imap_alerts()) . "</pre><hr><br>";
-            error_log(imap_last_error());
+            echo "<hr>errors<pre>" . print_r(\imap_errors()) . "</pre><hr><br>";
+            echo "<hr>alerts<pre>" . print_r(\imap_alerts()) . "</pre><hr><br>";
+            error_log(\imap_last_error());
             throw new \Exception("IMAP connection lost");
         }
         return $imapresult;
@@ -590,21 +590,21 @@ class IMAPMessage {
         // WARNING: doesn't work ok -> mail is moved and moved back a few seconds later.... very weird problem
 //        echo "function moveToFolder;<br>";
 //        echo "connection = " . print_r($connection, true) . ", index = ". $this->messageindex . ", folder = " . $folder . "<br>";
-        $imapresult = imap_mail_move($connection, $this->messageindex, $folder, CP_UID);
+        $imapresult = \imap_mail_move($connection, $this->messageindex, $folder, CP_UID);
 //        $imapresult = imap_mail_move($connection, $this->messageindex, $folder, CP_UID);
 //        $imapresult = imap_mail_move($connection, $this->getUID(), $folder, CP_UID);
 //                $imapresult = imap_mail_move($connection, $this->messageindex, $folder);
         if ($imapresult == false) {
-            echo "<hr>errors<pre>" . print_r(imap_errors()) . "</pre><hr><br>";
-            echo "<hr>alerts<pre>" . print_r(imap_alerts()) . "</pre><hr><br>";
-            error_log(imap_last_error());
+            echo "<hr>errors<pre>" . print_r(\imap_errors()) . "</pre><hr><br>";
+            echo "<hr>alerts<pre>" . print_r(\imap_alerts()) . "</pre><hr><br>";
+            error_log(\imap_last_error());
             throw new \Exception("IMAP connection lost");
         }
         return $imapresult;
     }
 
     public function copyToOtherMailbox($host, $user, $pwd, $mailboxfolder, $checkforduplicates = IMAPMessage::DONTCHECKFORDUPLICATES) {
-        $destmbox = imap_open($host, $user, $pwd);
+        $destmbox = \imap_open($host, $user, $pwd);
 
         //  imap_reopen($destmbox, $host.$mailboxfolder);
         //  $folders = imap_list($destmbox, $host, "*");
@@ -638,10 +638,10 @@ class IMAPMessage {
         $messageOptions = implode(' ', $options);
         $messageDate = date('d-M-Y H:i:s O', $headerinfo->udate);
 
-        if (imap_append($destmbox, $host . $mailboxfolder, $header . "\r\n" . $body, $messageOptions, $messageDate)) {
+        if (\imap_append($destmbox, $host . $mailboxfolder, $header . "\r\n" . $body, $messageOptions, $messageDate)) {
             
         }
-        imap_close($destmbox);
+        \imap_close($destmbox);
     }
 
 }

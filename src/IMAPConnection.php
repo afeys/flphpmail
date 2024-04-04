@@ -31,7 +31,7 @@ class IMAPConnection {
         $this->mailbox = $mailbox;
         $this->user = $user;
         $this->password = $password;
-        $this->connection = imap_open($mailbox, $user, $password);
+        $this->connection = \imap_open($mailbox, $user, $password);
         return $this;
     }
 
@@ -42,13 +42,13 @@ class IMAPConnection {
     }
 
     public function reConnect() {
-        $this->connection = imap_open($this->mailbox, $this->user, $this->password);
+        $this->connection = \imap_open($this->mailbox, $this->user, $this->password);
         return $this;
     }
 
     public function close() {
-        imap_errors();
-        if (imap_close($this->connection, CL_EXPUNGE)) {
+        \imap_errors();
+        if (\imap_close($this->connection, CL_EXPUNGE)) {
             $this->mailbox = null;
             $this->user = null;
             $this->password = null;
@@ -109,14 +109,14 @@ class IMAPConnection {
 
     public function openFolder($foldername) {
         $this->foldername = $foldername;
-        $this->result = imap_reopen($this->connection, $this->mailbox . $foldername);
+        $this->result = \imap_reopen($this->connection, $this->mailbox . $foldername);
         return $this;
     }
 
     public function searchMessages($searchcriteria = null, $page = null, $numperpage = IMAPConnection::DEFAULTNUMBEROFMESSAGESPERPAGE) {
         $searchstring = $searchcriteria->toString();
         $this->errormessage = $searchstring;
-        $msgnos = imap_search($this->connection, $searchstring);
+        $msgnos = \imap_search($this->connection, $searchstring);
         if ($msgnos == false) {
             $this->errormessage .= "search returned false";
             $this->messagecount = 0;
@@ -159,7 +159,7 @@ class IMAPConnection {
     }
 
     public function loadMessages($sortorder = IMAPConnection::SORTMOSTRECENTFIRST, $page = null, $numperpage = IMAPConnection::DEFAULTNUMBEROFMESSAGESPERPAGE) {
-        $this->messagecount = imap_num_msg($this->connection);
+        $this->messagecount = \imap_num_msg($this->connection);
 
         $this->messages = array();
         $this->firstmessage = 1;
@@ -213,11 +213,15 @@ if Found = 0 oAccount.IMAPFolders.ItemByName("Inbox").Subfolders.Add(SentFolderA
          */
         $returnvalue = null;
         if ($this->connection !== null) {
-            if (@imap_createmailbox($this->connection,$this->mailbox . "/" . imap_utf7_encode($foldername))) {
-                // successfully created mailbox
-            } else {
-                throw new \Exception("IMAP: couldn't create folder ". $foldername . " due to error: " . imap_last_error());
+            try {
+                if (\imap_createmailbox($this->connection, $this->mailbox . "/" . \imap_utf7_encode($foldername))) {
+                    // successfully created mailbox
+                } else {
+                    throw new \Exception("IMAP: couldn't create folder " . $foldername . " due to error: " . \imap_last_error());
 //                echo "<pre>";print_r(imap_errors());echo"</pre>";
+                }
+            } catch (Exception $e) {
+                // TODO do something with this
             }
         }
         return $returnvalue;
@@ -232,7 +236,7 @@ if Found = 0 oAccount.IMAPFolders.ItemByName("Inbox").Subfolders.Add(SentFolderA
         $returnvalue = array();
         $folders = array();
         if ($this->connection !== null) {
-            $folders = imap_list($this->connection, $this->mailbox, "*");
+            $folders = \imap_list($this->connection, $this->mailbox, "*");
         }
         if (is_array($folders)) {
             foreach ($folders as $folder) {
