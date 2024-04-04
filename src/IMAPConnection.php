@@ -1,6 +1,6 @@
 <?php
 
-namespace FL\src;
+namespace FL;
 
 use FL\Message;
 use FL\MessageType;

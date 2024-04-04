@@ -1,6 +1,6 @@
 <?php
 
-namespace FL\src;
+namespace FL;
 
 class IMAPSearchString {
 

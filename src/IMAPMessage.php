@@ -1,8 +1,8 @@
 <?php
 
-namespace FL\src;
+namespace FL;
 
-use FL\StringTool;
+use FL\StringHelper;
 
 class IMAPMessageHeader {
     /*
