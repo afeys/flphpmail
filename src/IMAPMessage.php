@@ -63,14 +63,14 @@ class IMAPMessageHeader {
     public function __construct($header) {
         $this->fullheader = $header;
         $headerarray = \FL\ObjectHelper::getInstance($header);
-        $this->date = $headerarray->getItemWithKey("date");
-        $this->subject = $headerarray->getItemWithKey("subject");
-        $this->message_id = $headerarray->getItemWithKey("message_id");
-        $this->size = $headerarray->getItemWithKey("Size");
-        $this->sender = $this->parseEmailAddressArray($headerarray->getItemWithKey("from"));
-        $this->receiver = $this->parseEmailAddressArray($headerarray->getItemWithKey("to"));
-        $this->receiverCC = $this->parseEmailAddressArray($headerarray->getItemWithKey("cc"));
-        $this->receiverBCC = $this->parseEmailAddressArray($headerarray->getItemWithKey("bcc"));
+        $this->date = $headerarray->getItemWithKey("date","");
+        $this->subject = $headerarray->getItemWithKey("subject","");
+        $this->message_id = $headerarray->getItemWithKey("message_id","");
+        $this->size = $headerarray->getItemWithKey("Size","");
+        $this->sender = $this->parseEmailAddressArray($headerarray->getItemWithKey("from",""));
+        $this->receiver = $this->parseEmailAddressArray($headerarray->getItemWithKey("to",""));
+        $this->receiverCC = $this->parseEmailAddressArray($headerarray->getItemWithKey("cc",""));
+        $this->receiverBCC = $this->parseEmailAddressArray($headerarray->getItemWithKey("bcc",""));
     }
 
     private function cleanupMailAddress($mailaddress) {
@@ -84,9 +84,9 @@ class IMAPMessageHeader {
         if (is_array($emailaddressinfo)) {
             foreach ($emailaddressinfo as $idx => $emailaddress) {
                 $emailinfoarray = \FL\ObjectHelper::getInstance($emailaddress);
-                $personal = $emailinfoarray->getItemWithKey("personal");
-                $mailbox = $emailinfoarray->getItemWithKey("mailbox");
-                $host = $emailinfoarray->getItemWithKey("host");
+                $personal = $emailinfoarray->getItemWithKey("personal","");
+                $mailbox = $emailinfoarray->getItemWithKey("mailbox","");
+                $host = $emailinfoarray->getItemWithKey("host","");
                 if (strlen(trim($personal)) == 0) {
                     if (strlen(trim($mailbox)) > 0 && strlen(trim($host)) == 0) {
                         $personal = $mailbox;
