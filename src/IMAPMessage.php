@@ -3,6 +3,7 @@
 namespace FL;
 
 use FL\StringHelper;
+use FL\ObjectHelper;
 
 class IMAPMessageHeader {
     /*
@@ -358,7 +359,7 @@ class IMAPMessage {
                                 $attachment = $this->getPart($connection->getConnection(), $index, $partNumber, $part->encoding);
                                 $this->attachments[] = array("filename" => $filename, "date" => $this->header->getDate(), "mailbox" => $connection->getMailBox(), "folder" => $connection->getFolderName(), "index" => $index, "user" => $connection->getUser(), "password" => $connection->getPassword());
                                 // now do something with the attachment, e.g. save it somewhere
-                                $suffix = \FL\StringHelper::getInstance($filename)->getEverythingAfterLast(".")->toString();
+                                $suffix = \FL\StringHelper::getInstance($filename)->keepEverythingAfterLast(".")->toString();
                                 if (strlen(trim($suffix)) > 0) {
                                     if (array_key_exists($suffix, $attachmenttypecounter)) {
                                         $attachmenttypecounter[$suffix] += 1;
