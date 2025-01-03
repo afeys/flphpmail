@@ -93,7 +93,7 @@ class IMAPMessageHeader {
                         $mailbox = "";
                     }
                 }
-                if (StringTool::getInstance($personal)->startsWith("=")) {
+                if (\FL\StringHelper::getInstance($personal)->startsWith("=")) {
                     $personal = $mailbox;
                 }
                 $tmpmailaddress = $this->cleanupMailAddress($mailbox . "@" . $host);
@@ -118,12 +118,12 @@ class IMAPMessageHeader {
             }
             $displayname = "";
             if (strlen(trim($name)) == 0) {
-                $displayname = StringTool::getInstance($email)->replace(" ", "&nbsp;")->toString();
+                $displayname = \FL\StringHelper::getInstance($email)->replace(" ", "&nbsp;")->toString();
             } else {
-                $displayname = StringTool::getInstance($name)->replace(" ", "&nbsp;")->toString();
+                $displayname = \FL\StringHelper::getInstance($name)->replace(" ", "&nbsp;")->toString();
             }
             $returnvalue .= "<a title=\"" . $displayname . "\" class=\"emailaddress " . $extraclass . "\" href=\"mailto:" . $email . "\">";
-            $returnvalue .= StringTool::getInstance($displayname)->getFirst(20, true)->toString();
+            $returnvalue .= \FL\StringHelper::getInstance($displayname)->getFirst(20, true)->toString();
             $returnvalue .= "</a> "; // the extra space is important, otherwise DBPanelMailArchive concatenates all mailaddress on ONE line, no auto linesplitting
         }
         return $returnvalue;
@@ -245,7 +245,7 @@ class IMAPMessageBody {
         if (strlen(trim($this->bodyhtml)) > 0) {
             $this->ishtmlmessage = true;
             if (strlen(trim($this->body)) == 0) {
-                $convertor = StringTool::getInstance($this->getBodyHTML());
+                $convertor = \FL\StringHelper::getInstance($this->getBodyHTML());
                 $convertor->htmlToPlainText();
                 $this->body = $convertor->toString();
             }
@@ -277,7 +277,7 @@ class IMAPMessageBody {
     }
 
     public function summarize() {
-        return StringTool::getInstance($this->getBody())->removeExcessiveWhiteSpace()->getFirst(250)->toString();
+        return \FL\StringHelper::getInstance($this->getBody())->removeExcessiveWhiteSpace()->getFirst(250)->toString();
     }
 
 }
