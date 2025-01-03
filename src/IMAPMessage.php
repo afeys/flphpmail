@@ -79,6 +79,13 @@ class IMAPMessageHeader {
         return $returnvalue;
     }
 
+    private function isValidMailAddress($mailaddress) {
+        if (filter_var($mailaddress, FILTER_VALIDATE_EMAIL)) {
+            return true;
+        }
+        return false;
+    }
+
     private function parseEmailAddressArray($emailaddressinfo) {
         $returnvalue = array();
         if (is_array($emailaddressinfo)) {
@@ -97,7 +104,7 @@ class IMAPMessageHeader {
                     $personal = $mailbox;
                 }
                 $tmpmailaddress = $this->cleanupMailAddress($mailbox . "@" . $host);
-                if (isValidMailAddress($tmpmailaddress)) {
+                if ($this->isValidMailAddress($tmpmailaddress)) {
                     $returnvalue[] = array("name" => $personal, "emailaddress" => $tmpmailaddress);
                 }
             }
