@@ -62,7 +62,7 @@ class IMAPMessageHeader {
 
     public function __construct($header) {
         $this->fullheader = $header;
-        $headerarray = ObjectTool::getInstance($header);
+        $headerarray = \FL\ObjectHelper::getInstance($header);
         $this->date = $headerarray->getItemWithKey("date");
         $this->subject = $headerarray->getItemWithKey("subject");
         $this->message_id = $headerarray->getItemWithKey("message_id");
@@ -83,7 +83,7 @@ class IMAPMessageHeader {
         $returnvalue = array();
         if (is_array($emailaddressinfo)) {
             foreach ($emailaddressinfo as $idx => $emailaddress) {
-                $emailinfoarray = ObjectTool::getInstance($emailaddress);
+                $emailinfoarray = \FL\ObjectHelper::getInstance($emailaddress);
                 $personal = $emailinfoarray->getItemWithKey("personal");
                 $mailbox = $emailinfoarray->getItemWithKey("mailbox");
                 $host = $emailinfoarray->getItemWithKey("host");
