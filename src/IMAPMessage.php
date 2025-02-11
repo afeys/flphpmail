@@ -598,7 +598,7 @@ class IMAPMessage {
         // WARNING: doesn't work ok -> mail is moved and moved back a few seconds later.... very weird problem
 //        echo "function moveToFolder;<br>";
 //        echo "connection = " . print_r($connection, true) . ", index = ". $this->messageindex . ", folder = " . $folder . "<br>";
-        $imapresult = \imap_mail_move($connection, $this->messageindex, $folder, CP_UID);
+        $imapresult = \imap_mail_move($connection, $this->messageindex, $folder);
 //        $imapresult = imap_mail_move($connection, $this->messageindex, $folder, CP_UID);
 //        $imapresult = imap_mail_move($connection, $this->getUID(), $folder, CP_UID);
 //                $imapresult = imap_mail_move($connection, $this->messageindex, $folder);
